@@ -1,26 +1,21 @@
 package org.jokeoa;
 
-/**
- * Context for MergeSort containing all necessary data for sorting
- */
 public class SortContext {
-    private final int[] array;           // Original array for sorting
-    private final int[] buffer;          // Reusable buffer for merging
+    private final int[] array;           // Original array to sort
+    private final int[] buffer;          // Reusable buffer (for MergeSort)
     private final SortMetrics metrics;   // Performance metrics
     private final int cutoffThreshold;   // Threshold for switching to insertion sort
 
     /**
-     * Context constructor
      * @param array array to sort
-     * @param metrics object for collecting metrics (can be null)
-     * @param cutoffThreshold threshold for switching to simple sorting
+     * @param metrics metrics collection object (can be null)
+     * @param cutoffThreshold threshold for switching to simple sort
      */
     public SortContext(int[] array, SortMetrics metrics, int cutoffThreshold) {
         this.array = array;
         this.metrics = metrics;
         this.cutoffThreshold = cutoffThreshold;
 
-        // Create buffer with half the size of the array (rounded up)
         this.buffer = new int[(array.length + 1) / 2];
     }
 
@@ -38,7 +33,6 @@ public class SortContext {
         this(array, null, 7);
     }
 
-    // Getters for data access
     public int[] getArray() {
         return array;
     }
@@ -70,6 +64,18 @@ public class SortContext {
         }
     }
 
+    public void recordSwap() {
+        if (metrics != null) {
+            metrics.recordSwap();
+        }
+    }
+
+    public void recordPartition(int leftSize, int rightSize) {
+        if (metrics != null) {
+            metrics.recordPartition(leftSize, rightSize);
+        }
+    }
+
     public void enterRecursion() {
         if (metrics != null) {
             metrics.enterRecursion();
@@ -83,17 +89,16 @@ public class SortContext {
     }
 
     /**
-     * Gets the size of array section
+     * Gets the size of array segment
      */
     public int getSubarraySize(int left, int right) {
         return right - left + 1;
     }
 
     /**
-     * Checks if cutoff should be used for given section
+     * Checks if cutoff should be used for this segment
      */
     public boolean shouldUseCutoff(int left, int right) {
         return getSubarraySize(left, right) <= cutoffThreshold;
     }
-
 }
