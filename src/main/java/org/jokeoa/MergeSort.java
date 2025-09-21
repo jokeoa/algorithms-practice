@@ -7,7 +7,7 @@ public class MergeSort {
      * @param right end of the right side
      * @param context context with all data
      */
-    public static void merge(MergeSortContext context, int left, int middle, int right) {
+    public static void merge(SortContext context, int left, int middle, int right) {
 
         int[] buffer = context.getBuffer();
         int[] array = context.getArray();
@@ -50,7 +50,7 @@ public class MergeSort {
      * @param right right boundary
      * @param context context with all data
      */
-    public static void mergeSort(MergeSortContext context, int left, int right) {
+    public static void mergeSort(SortContext context, int left, int right) {
         context.enterRecursion();
         if (left < right) {
             if (context.shouldUseCutoff(left, right)) {
@@ -68,7 +68,7 @@ public class MergeSort {
     }
     public static void sort(int[] array) {
         if (array.length > 1) {
-            MergeSortContext context = new MergeSortContext(array);
+            SortContext context = new SortContext(array);
             mergeSort(context, 0, array.length - 1);
         }
     }
@@ -83,7 +83,7 @@ public class MergeSort {
         metrics.startTiming();
 
         if (array.length > 1) {
-            MergeSortContext context = new MergeSortContext(array, metrics);
+            SortContext context = new SortContext(array, metrics);
             mergeSort(context, 0, array.length - 1);
         }
 
@@ -100,7 +100,7 @@ public class MergeSort {
         metrics.startTiming();
 
         if (array.length > 1) {
-            MergeSortContext context = new MergeSortContext(array, metrics);
+            SortContext context = new SortContext(array, metrics);
             mergeSort(context, 0, array.length - 1);
         }
 

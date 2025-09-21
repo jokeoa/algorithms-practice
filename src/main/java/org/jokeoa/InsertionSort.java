@@ -7,7 +7,7 @@ public class InsertionSort {
      * @param left segment start (inclusive)
      * @param right segment end (inclusive)
      */
-    public static void sort(MergeSortContext context, int left, int right) {
+    public static void sort(SortContext context, int left, int right) {
         int[] array = context.getArray();
 
         for (int i = left + 1; i <= right; i++) {
