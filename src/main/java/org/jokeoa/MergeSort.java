@@ -52,14 +52,17 @@ public class MergeSort {
      */
     public static void mergeSort(MergeSortContext context, int left, int right) {
         context.enterRecursion();
-        if (left < right){
+        if (left < right) {
+            if (context.shouldUseCutoff(left, right)) {
+                InsertionSort.sort(context, left, right);
+            } else {
+                int middle = left+(right-left)/2;
 
-            int middle = left+(right-left)/2;
+                mergeSort(context, left, middle);
+                mergeSort(context, middle+1, right);
 
-            mergeSort(context, left, middle);
-            mergeSort(context, middle+1, right);
-
-            merge(context, left, middle, right);
+                merge(context, left, middle, right);
+            }
         }
         context.exitRecursion();
     }
