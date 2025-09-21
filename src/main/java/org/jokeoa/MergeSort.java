@@ -2,81 +2,71 @@ package org.jokeoa;
 public class MergeSort {
 
     /**
-     *  @param array source array
      * @param left begin of left side
      * @param middle end of left side
      * @param right end of the right side
-     * @param metrics metrics collector
+     * @param context context with all data
      */
-    public static void merge(int[] array, int left, int middle, int right, SortMetrics metrics) {
-        int leftSize = middle - left + 1;
-        int rightSize = right - middle;
+    public static void merge(MergeSortContext context, int left, int middle, int right) {
 
-        int[] leftArray = new int[leftSize];
-        int[] rightArray = new int[rightSize];
+        int[] buffer = context.getBuffer();
+        int[] array = context.getArray();
+
+        int leftSize = middle - left + 1;
 
         for (int i = 0; i < leftSize; i++) {
-            leftArray[i] = array[left + i];
-            if (metrics != null) metrics.recordArrayAccess();
+            buffer[i] = array[left + i];
+            context.recordArrayAccess();
         }
-        for (int j = 0; j < rightSize; j++) {
-            rightArray[j] = array[middle + 1 + j];
-            if (metrics != null) metrics.recordArrayAccess();
-        }
+
         int i = 0;
-        int j = 0;
+        int j = middle + 1;
         int k = left;
-        while (i < leftSize && j < rightSize) {
-            if (metrics != null) metrics.recordComparison();
-            if (leftArray[i] <= rightArray[j]) {
-                array[k] = leftArray[i];
+
+        while (i < leftSize && j <= right) {
+            context.recordComparison();
+            if (buffer[i] <= array[j]) {
+                array[k] = buffer[i];
                 i++;
-                if (metrics != null) metrics.recordArrayAccess();
+                context.recordArrayAccess();
             } else {
-                array[k] = rightArray[j];
+                array[k] = array[j];
                 j++;
-                if (metrics != null) metrics.recordArrayAccess();
+                context.recordArrayAccess();
             }
             k++;
         }
 
         while (i<leftSize){
-            array[k] = leftArray[i];
-            if (metrics != null) metrics.recordArrayAccess();
+            array[k] = buffer[i];
+            context.recordArrayAccess();
             i++;
-            k++;
-        }
-
-        while (j<rightSize){
-            array[k] = rightArray[j];
-            if (metrics != null) metrics.recordArrayAccess();
-            j++;
             k++;
         }
     }
 
     /**
-     * @param array array to sort
      * @param left left boundary
      * @param right right boundary
-     * @param metrics metrics collector
+     * @param context context with all data
      */
-    public static void mergeSort(int[] array, int left, int right,  SortMetrics metrics) {
-        if (metrics != null) metrics.enterRecursion();
+    public static void mergeSort(MergeSortContext context, int left, int right) {
+        context.enterRecursion();
         if (left < right){
 
             int middle = left+(right-left)/2;
 
-            mergeSort(array, left, middle, metrics);
-            mergeSort(array, middle+1, right, metrics);
+            mergeSort(context, left, middle);
+            mergeSort(context, middle+1, right);
 
-            merge(array, left, middle, right, metrics);
+            merge(context, left, middle, right);
         }
-        if (metrics != null) metrics.exitRecursion();
+        context.exitRecursion();
     }
     public static void sort(int[] array) {
         if (array.length > 1) {
-            mergeSort(array, 0, array.length - 1, null);
+            MergeSortContext context = new MergeSortContext(array);
+            mergeSort(context, 0, array.length - 1);
         }
     }
     /**
@@ -90,7 +80,8 @@ public class MergeSort {
         metrics.startTiming();
 
         if (array.length > 1) {
-            mergeSort(array, 0, array.length - 1, metrics);
+            MergeSortContext context = new MergeSortContext(array, metrics);
+            mergeSort(context, 0, array.length - 1);
         }
 
         metrics.endTiming();
@@ -106,7 +97,8 @@ public class MergeSort {
         metrics.startTiming();
 
         if (array.length > 1) {
-            mergeSort(array, 0, array.length - 1, metrics);
+            MergeSortContext context = new MergeSortContext(array, metrics);
+            mergeSort(context, 0, array.length - 1);
         }
 
         metrics.endTiming();

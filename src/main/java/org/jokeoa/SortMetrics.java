@@ -1,19 +1,19 @@
 package org.jokeoa;
 
 /**
- * Класс для сбора метрик работы алгоритмов сортировки.
- * Помогает понять, как алгоритм ведет себя на практике.
+ * Class for collecting metrics of sorting algorithms.
+ * Helps understand how the algorithm behaves in practice.
  */
 public class SortMetrics {
-    private int maxRecursionDepth;     // Максимальная глубина рекурсии
-    private int currentDepth;          // Текущая глубина рекурсии
-    private int totalComparisons;      // Общее количество сравнений
-    private int totalArrayAccesses;    // Общее количество обращений к массиву
-    private long startTime;            // Время начала сортировки
-    private long endTime;              // Время окончания сортировки
+    private int maxRecursionDepth;     // Maximum recursion depth
+    private int currentDepth;          // Current recursion depth
+    private int totalComparisons;      // Total number of comparisons
+    private int totalArrayAccesses;    // Total number of array accesses
+    private long startTime;            // Sorting start time
+    private long endTime;              // Sorting end time
 
     /**
-     * Сбрасываем все счетчики перед началом новой сортировки
+     * Reset all counters before starting new sorting
      */
     public void reset() {
         maxRecursionDepth = 0;
@@ -25,7 +25,7 @@ public class SortMetrics {
     }
 
     /**
-     * Вызывается при входе в рекурсивную функцию
+     * Called when entering recursive function
      */
     public void enterRecursion() {
         currentDepth++;
@@ -35,41 +35,41 @@ public class SortMetrics {
     }
 
     /**
-     * Вызывается при выходе из рекурсивной функции
+     * Called when exiting recursive function
      */
     public void exitRecursion() {
         currentDepth--;
     }
 
     /**
-     * Увеличиваем счетчик сравнений (когда сравниваем два элемента)
+     * Increment comparison counter (when comparing two elements)
      */
     public void recordComparison() {
         totalComparisons++;
     }
 
     /**
-     * Увеличиваем счетчик обращений к массиву (чтение или запись)
+     * Increment array access counter (read or write)
      */
     public void recordArrayAccess() {
         totalArrayAccesses++;
     }
 
     /**
-     * Отмечаем начало сортировки
+     * Mark the start of sorting
      */
     public void startTiming() {
         startTime = System.nanoTime();
     }
 
     /**
-     * Отмечаем конец сортировки
+     * Mark the end of sorting
      */
     public void endTiming() {
         endTime = System.nanoTime();
     }
 
-    // Геттеры для получения собранных метрик
+    // Getters for collected metrics
     public int getMaxRecursionDepth() {
         return maxRecursionDepth;
     }
@@ -83,31 +83,31 @@ public class SortMetrics {
     }
 
     /**
-     * Возвращает время выполнения в миллисекундах
+     * Returns execution time in milliseconds
      */
     public double getExecutionTimeMs() {
         return (endTime - startTime) / 1_000_000.0;
     }
 
     /**
-     * Красиво выводим все собранные метрики
+     * Print all collected metrics nicely
      */
     public void printMetrics(String algorithmName, int arraySize) {
-        System.out.println("=== Метрики для " + algorithmName + " ===");
-        System.out.println("Размер массива: " + arraySize);
-        System.out.println("Максимальная глубина рекурсии: " + maxRecursionDepth);
-        System.out.println("Общее количество сравнений: " + totalComparisons);
-        System.out.println("Общее количество обращений к массиву: " + totalArrayAccesses);
-        System.out.printf("Время выполнения: %.3f мс%n", getExecutionTimeMs());
+        System.out.println("=== Metrics for " + algorithmName + " ===");
+        System.out.println("Array size: " + arraySize);
+        System.out.println("Maximum recursion depth: " + maxRecursionDepth);
+        System.out.println("Total comparisons: " + totalComparisons);
+        System.out.println("Total array accesses: " + totalArrayAccesses);
+        System.out.printf("Execution time: %.3f ms%n", getExecutionTimeMs());
 
-        // Вычисляем теоретическую глубину рекурсии для сравнения
+        // Calculate theoretical recursion depth for comparison
         int theoreticalDepth = (int) Math.ceil(Math.log(arraySize) / Math.log(2));
-        System.out.println("Теоретическая глубина (log₂ n): " + theoreticalDepth);
+        System.out.println("Theoretical depth (log₂ n): " + theoreticalDepth);
 
         if (maxRecursionDepth <= theoreticalDepth + 1) {
-            System.out.println("✓ Глубина рекурсии в ожидаемых пределах");
+            System.out.println("✓ Recursion depth within expected limits");
         } else {
-            System.out.println("⚠ Глубина рекурсии больше ожидаемой");
+            System.out.println("⚠ Recursion depth exceeds expected");
         }
     }
 }
