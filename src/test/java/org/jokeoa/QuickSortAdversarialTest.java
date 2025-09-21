@@ -8,13 +8,13 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Специальные "adversarial" тесты для QuickSort - случаи, которые могут
- * выявить проблемы в реализации или показать худшую производительность.
+ * Special "adversarial" tests for QuickSort - cases that can
+ * reveal implementation problems or show worst performance.
  */
 public class QuickSortAdversarialTest {
 
     @Test
-    @DisplayName("Классический worst-case: отсортированный массив")
+    @DisplayName("Classic worst-case: sorted array")
     void testWorstCaseSorted() {
 
         int[] array = generateSortedArray(1000);
@@ -25,22 +25,22 @@ public class QuickSortAdversarialTest {
 
 
         double timeMs = (endTime - startTime) / 1_000_000.0;
-        assertTrue(timeMs < 100, "Сортировка заняла слишком много времени: " + timeMs + " мс");
+        assertTrue(timeMs < 100, "Sorting took too much time: " + timeMs + " ms");
 
         int maxAllowedDepth = (int)(3 * Math.log(1000) / Math.log(2)) + 20;
         assertTrue(metrics.getMaxRecursionDepth() < maxAllowedDepth,
-                "Глубина рекурсии слишком большая: " + metrics.getMaxRecursionDepth());
+                "Recursion depth too large: " + metrics.getMaxRecursionDepth());
 
         assertTrue(isSorted(array));
 
-        System.out.println("Worst-case тест (отсортированный массив):");
-        System.out.println("  Время: " + timeMs + " мс");
-        System.out.println("  Глубина рекурсии: " + metrics.getMaxRecursionDepth());
-        System.out.println("  Средний баланс pivot: " + metrics.getAveragePartitionBalance() + "%");
+        System.out.println("Worst-case test (sorted array):");
+        System.out.println("  Time: " + timeMs + " ms");
+        System.out.println("  Recursion depth: " + metrics.getMaxRecursionDepth());
+        System.out.println("  Average pivot balance: " + metrics.getAveragePartitionBalance() + "%");
     }
 
     @Test
-    @DisplayName("Все элементы одинаковые - тест на дубликаты")
+    @DisplayName("All elements identical - duplicate test")
     void testAllIdentical() {
         int[] sizes = {100, 500, 1000};
 
@@ -55,13 +55,13 @@ public class QuickSortAdversarialTest {
 
             int maxDepth = (int)(2 * Math.log(size) / Math.log(2)) + 10;
             assertTrue(metrics.getMaxRecursionDepth() <= maxDepth,
-                    String.format("Размер %d: глубина %d > ожидаемой %d",
+                    String.format("Size %d: depth %d > expected %d",
                             size, metrics.getMaxRecursionDepth(), maxDepth));
         }
     }
 
     @Test
-    @DisplayName("Паттерн 'органные трубы' - убывание, затем возрастание")
+    @DisplayName("Organ pipe pattern - decreasing, then increasing")
     void testOrganPipePattern() {
         int[] array = generateOrganPipeArray(200);
 
@@ -69,14 +69,14 @@ public class QuickSortAdversarialTest {
 
         assertTrue(isSorted(array));
 
-        System.out.println("Organ pipe тест:");
-        System.out.println("  Глубина рекурсии: " + metrics.getMaxRecursionDepth());
-        System.out.println("  Количество сравнений: " + metrics.getTotalComparisons());
-        System.out.println("  Средний баланс pivot: " + metrics.getAveragePartitionBalance() + "%");
+        System.out.println("Organ pipe test:");
+        System.out.println("  Recursion depth: " + metrics.getMaxRecursionDepth());
+        System.out.println("  Number of comparisons: " + metrics.getTotalComparisons());
+        System.out.println("  Average pivot balance: " + metrics.getAveragePartitionBalance() + "%");
     }
 
     @Test
-    @DisplayName("Много повторяющихся значений - тест стабильности")
+    @DisplayName("Many repeating values - stability test")
     void testManyDuplicatesStability() {
         int[] array = generateArrayWithFewUniqueValues(1000, 10);
 
@@ -84,14 +84,14 @@ public class QuickSortAdversarialTest {
 
         assertTrue(isSorted(array));
 
-        System.out.println("Тест множественных дубликатов:");
-        System.out.println("  Время выполнения: " + metrics.getExecutionTimeMs() + " мс");
-        System.out.println("  Количество разделений: " + metrics.getPartitionCalls());
-        System.out.println("  Худшее разделение: " + metrics.getWorstPartition() + "% отклонения");
+        System.out.println("Multiple duplicates test:");
+        System.out.println("  Execution time: " + metrics.getExecutionTimeMs() + " ms");
+        System.out.println("  Partition calls: " + metrics.getPartitionCalls());
+        System.out.println("  Worst partition: " + metrics.getWorstPartition() + "% deviation");
     }
 
     @Test
-    @DisplayName("Массив с 'плохими' pivot выборами")
+    @DisplayName("Array with 'bad' pivot choices")
     void testBadPivotScenarios() {
 
         int[] array = createBadPivotArray(500);
@@ -101,16 +101,16 @@ public class QuickSortAdversarialTest {
         assertTrue(isSorted(array));
 
         assertTrue(metrics.getExecutionTimeMs() < 50,
-                "Время выполнения слишком большое: " + metrics.getExecutionTimeMs() + " мс");
+                "Execution time too large: " + metrics.getExecutionTimeMs() + " ms");
 
-        System.out.println("Bad pivot тест:");
-        System.out.println("  Средний баланс: " + metrics.getAveragePartitionBalance() + "%");
-        System.out.println("  Лучшее разделение: " + metrics.getBestPartition() + "%");
-        System.out.println("  Худшее разделение: " + metrics.getWorstPartition() + "%");
+        System.out.println("Bad pivot test:");
+        System.out.println("  Average balance: " + metrics.getAveragePartitionBalance() + "%");
+        System.out.println("  Best partition: " + metrics.getBestPartition() + "%");
+        System.out.println("  Worst partition: " + metrics.getWorstPartition() + "%");
     }
 
     @Test
-    @DisplayName("Стресс-тест: много маленьких массивов")
+    @DisplayName("Stress test: many small arrays")
     void testManySmallArrays() {
 
         int totalTime = 0;
@@ -126,17 +126,17 @@ public class QuickSortAdversarialTest {
 
             totalTime += (end - start);
 
-            assertTrue(isSorted(array), "Массив " + i + " размера " + size + " не отсортирован");
+            assertTrue(isSorted(array), "Array " + i + " of size " + size + " not sorted");
         }
 
         double avgTimeNs = totalTime / (double) totalTests;
-        System.out.println("Стресс-тест маленьких массивов:");
-        System.out.println("  Среднее время на массив: " + avgTimeNs / 1000 + " микросекунд");
-        System.out.println("  Всего протестировано: " + totalTests + " массивов");
+        System.out.println("Small arrays stress test:");
+        System.out.println("  Average time per array: " + avgTimeNs / 1000 + " microseconds");
+        System.out.println("  Total tested: " + totalTests + " arrays");
     }
 
     @Test
-    @DisplayName("Экстремально большой массив (если память позволяет)")
+    @DisplayName("Extremely large array (if memory allows)")
     void testVeryLargeArray() {
         try {
             int size = 100_000;
@@ -148,14 +148,14 @@ public class QuickSortAdversarialTest {
 
             assertTrue(isSorted(array));
 
-            System.out.println("Тест большого массива (100K элементов):");
-            System.out.println("  Время: " + (end - start) + " мс");
-            System.out.println("  Глубина рекурсии: " + metrics.getMaxRecursionDepth());
-            System.out.println("  Сравнений: " + metrics.getTotalComparisons());
-            System.out.println("  Обменов: " + metrics.getTotalSwaps());
+            System.out.println("Large array test (100K elements):");
+            System.out.println("  Time: " + (end - start) + " ms");
+            System.out.println("  Recursion depth: " + metrics.getMaxRecursionDepth());
+            System.out.println("  Comparisons: " + metrics.getTotalComparisons());
+            System.out.println("  Swaps: " + metrics.getTotalSwaps());
 
         } catch (OutOfMemoryError e) {
-            System.out.println("Недостаточно памяти для теста большого массива");
+            System.out.println("Insufficient memory for large array test");
         }
     }
 
@@ -172,12 +172,12 @@ public class QuickSortAdversarialTest {
         int[] array = new int[size];
         int mid = size / 2;
 
-        // Убывание до середины
+        // Decreasing to middle
         for (int i = 0; i < mid; i++) {
             array[i] = mid - i;
         }
 
-        // Возрастание от середины
+        // Increasing from middle
         for (int i = mid; i < size; i++) {
             array[i] = i - mid + 1;
         }
