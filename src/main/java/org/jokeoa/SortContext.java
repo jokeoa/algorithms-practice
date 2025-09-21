@@ -3,7 +3,7 @@ package org.jokeoa;
 /**
  * Context for MergeSort containing all necessary data for sorting
  */
-public class MergeSortContext {
+public class SortContext {
     private final int[] array;           // Original array for sorting
     private final int[] buffer;          // Reusable buffer for merging
     private final SortMetrics metrics;   // Performance metrics
@@ -15,7 +15,7 @@ public class MergeSortContext {
      * @param metrics object for collecting metrics (can be null)
      * @param cutoffThreshold threshold for switching to simple sorting
      */
-    public MergeSortContext(int[] array, SortMetrics metrics, int cutoffThreshold) {
+    public SortContext(int[] array, SortMetrics metrics, int cutoffThreshold) {
         this.array = array;
         this.metrics = metrics;
         this.cutoffThreshold = cutoffThreshold;
@@ -27,14 +27,14 @@ public class MergeSortContext {
     /**
      * Constructor with default parameters
      */
-    public MergeSortContext(int[] array, SortMetrics metrics) {
-        this(array, metrics, 7); // Standard cutoff = 7
+    public SortContext(int[] array, SortMetrics metrics) {
+        this(array, metrics, 7);
     }
 
     /**
      * Constructor without metrics
      */
-    public MergeSortContext(int[] array) {
+    public SortContext(int[] array) {
         this(array, null, 7);
     }
 
@@ -95,4 +95,5 @@ public class MergeSortContext {
     public boolean shouldUseCutoff(int left, int right) {
         return getSubarraySize(left, right) <= cutoffThreshold;
     }
+
 }
